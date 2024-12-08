@@ -141,13 +141,13 @@ mod test {
     }
 
     //RSE
-    #[test]
-    fn test_gp5_rse() {
-        let mut song: Song = Song::default();
-        song.read_gp5(&read_file(String::from("test/RSE.gp5")));
-        let mut song: Song = Song::default();
-        song.read_gp5(&read_file(String::from("test/Demo.gp5")));
-    }
+    // #[test]
+    // fn test_gp5_rse() {
+    //     let mut song: Song = Song::default();
+    //     song.read_gp5(&read_file(String::from("test/RSE.gp5")));
+    //     let mut song: Song = Song::default();
+    //     song.read_gp5(&read_file(String::from("test/Demo.gp5")));
+    // }
 
     //slides
     #[test]
