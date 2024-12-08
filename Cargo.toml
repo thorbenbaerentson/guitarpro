@@ -2,4 +2,4 @@
 authors = ["slundi"]
 
 [workspace]
-members = ["lib", "cli", "web_server"]
+members = ["lib"]
