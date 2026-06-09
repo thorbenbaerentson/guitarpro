@@ -127,7 +127,6 @@ impl Song {
         track.fret_count = read_int(data, seek).to_u8().unwrap();
         track.offset = read_int(data, seek);
         track.color = read_color(data, seek);
-        println!("\tInstrument: {} \t Strings: {}/{} ({:?})", self.channels[index].get_instrument_name(), string_count, track.strings.len(), track.strings);
         self.tracks.push(track);
     }
 
@@ -251,7 +250,7 @@ impl Song {
         write_color(data, self.tracks[number].color);
     }
     fn write_track_v5(&self, data: &mut Vec<u8>, number: usize, version: &(u8,u8,u8)) {
-        if number == 1 || version == &(5,0,0) {write_placeholder_default(data, 1);}
+        if number == 0 || version == &(5,0,0) {write_placeholder_default(data, 1);}
         let mut flags1 = 0u8;
         if self.tracks[number].percussion_track             {flags1 |= 0x01;}
         if self.tracks[number].twelve_stringed_guitar_track {flags1 |= 0x02;}

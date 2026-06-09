@@ -66,6 +66,12 @@ impl MidiChannel {
         else {self.instrument = instrument;}
     }
 
+    pub fn with_instrument(mut self, instrument: i32) -> Self {
+        if instrument == -1 && self.is_percussion_channel() { self.instrument = 0; }
+        else {self.instrument = instrument;}
+        self
+    }
+
     pub(crate) fn _get_instrument(self) -> i32 {self.instrument}
     pub(crate) fn get_instrument_name(&self) -> String {String::from(CHANNEL_DEFAULT_NAMES[self.instrument.to_usize().unwrap()])} //TODO: FIXME: does not seems OK
 }
@@ -111,7 +117,6 @@ impl Song{
 
     pub(crate) fn write_midi_channels(&self, data: &mut Vec<u8>) {
         for i in 0..self.channels.len() {
-            println!("writing channel: {:?}", self.channels[i]);
             if self.channels[i].is_percussion_channel() && self.channels[i].instrument == 0 {write_i32(data, -1);}
             else                                                                            {write_i32(data, self.channels[i].instrument);}
             write_signed_byte(data, Self::from_channel_short(self.channels[i].volume));

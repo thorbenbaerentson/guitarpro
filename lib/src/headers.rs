@@ -121,7 +121,6 @@ impl Song {
             c.stop_beat = read_int(data, seek);
             c.sub_bar_copy = read_int(data, seek) != 0;
         }
-        println!("read_clipboard(): {:?}", c);
         Some(c)
     }
 
@@ -343,7 +342,7 @@ impl Song {
             if (flags & 0x03) == 0x03 {
                 for i in 0..self.measure_headers[header].time_signature.beams.len() {write_byte(data, self.measure_headers[header].time_signature.beams[i]);}
             }
-            if (flags & 0x10) == 0x10 {write_placeholder_default(data, 1);}
+            if (flags & 0x10) == 0 {write_placeholder_default(data, 1);}
             write_byte(data, from_triplet_feel(&self.measure_headers[header].triplet_feel));
         }
     }

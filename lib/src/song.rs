@@ -164,12 +164,9 @@ impl Song {
         let measure_count = read_int(data, &mut seek).to_usize().unwrap();
         let track_count = read_int(data, &mut seek).to_usize().unwrap();
         //println!("{} {} {} {:?}", self.tempo_name, self.tempo, self.hide_tempo, self.key.key); //OK
-        println!("Track count: {} \t Measure count: {}", track_count, measure_count); //OK
         self.read_measure_headers_v5(data, &mut seek, measure_count, &directions);
         self.read_tracks_v5(data, &mut seek, track_count);
-        println!("read_gp5(), after tracks   \t seek: {}", seek);
         self.read_measures(data, &mut seek);
-        println!("read_gp5(), after measures \t seek: {}", seek);
     }
 
     /// Read information (name, artist, ...)
@@ -185,7 +182,7 @@ impl Song {
         self.instructions= read_int_byte_size_string(data, seek); //instructions
         //notices
         let nc = read_int(data, seek).to_usize().unwrap(); //notes count
-        if nc > 0 { for i in 0..nc { self.notice.push(read_int_byte_size_string(data, seek)); println!("  {}\t\t{}",i, self.notice[self.notice.len()-1]); }}
+        if nc > 0 { for _ in 0..nc { self.notice.push(read_int_byte_size_string(data, seek)); }}
     }
 
     /*pub const _MAX_STRINGS: i32 = 25;

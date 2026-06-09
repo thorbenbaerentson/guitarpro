@@ -125,11 +125,14 @@ impl Song {
     }
 
     pub(crate) fn write_measures(&self, data: &mut Vec<u8>, version: &(u8,u8,u8)) {
-        for i in 0..self.tracks.len() {
-            //self.current_track = Some(i);
-            for m in 0..self.tracks[i].measures.len() {
-                //self.current_measure_number = Some(self.tracks[i].measure.number);
-                self.write_measure(data, i, m, version);
+        let measure_count = self.tracks.first().map_or(0, |track| track.measures.len());
+        for m in 0..measure_count {
+            //self.current_measure_number = Some(m + 1);
+            for i in 0..self.tracks.len() {
+                //self.current_track = Some(i);
+                if m < self.tracks[i].measures.len() {
+                    self.write_measure(data, i, m, version);
+                }
             }
         }
         //self.current_track = None;
