@@ -1,6 +1,5 @@
 # Guitar Pro Tools
 
-<<<<<<< HEAD
 A library to parse and write guitar pro files. This is a clone of [this](https://github.com/slundi/guitarpro) repository.
 =======
 A comprehensive suite of tools for parsing, manipulating, and visualizing Guitar Pro files in Rust.
@@ -48,4 +47,4 @@ cargo run -p cli -- --input path/to/song.gp5 --tab
 ## License
 
 This project is licensed under the MIT License.
->>>>>>> bbcf0add983f766439fc4ee93cd0c74d064db8a2
+
