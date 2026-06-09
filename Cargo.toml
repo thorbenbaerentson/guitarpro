@@ -2,4 +2,9 @@
 authors = ["slundi"]
 
 [workspace]
+<<<<<<< HEAD
 members = ["lib"]
+=======
+resolver = "2"
+members = ["guitarpro", "cli", "web_server"]
+>>>>>>> bbcf0add983f766439fc4ee93cd0c74d064db8a2
