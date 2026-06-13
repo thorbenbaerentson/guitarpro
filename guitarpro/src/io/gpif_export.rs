@@ -131,8 +131,8 @@ fn build_note_xml(note: &Note, note_id: i32) -> String {
     if let Some(bend) = &note.effect.bend
         && bend.points.len() >= 3
     {
-        let origin = bend.points[0].value as f64 * GP_BEND_SEMITONE as f64;
-        let dest = bend.points[2].value as f64 * GP_BEND_SEMITONE as f64;
+        let origin = bend.points[0].value as f64;
+        let dest = bend.points[2].value as f64;
         s.push_str(&format!(
             "<Property name=\"BendOriginValue\"><Float>{origin}</Float></Property>"
         ));

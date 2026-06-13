@@ -261,8 +261,9 @@ impl SongTrackOps for Song {
             }
         }
         track.port = read_int(data, seek)?.to_u8_gp("port")?;
-        self.read_channel(data, seek)?;
-        if self.channels[number].channel == 9 {
+        let channel_index = self.read_channel(data, seek)?;
+        track.channel_index = channel_index;
+        if self.channels[channel_index].channel == 9 {
             track.percussion_track = true;
         }
         track.fret_count = read_int(data, seek)?.to_u8_gp("fret count")?;
@@ -285,7 +286,7 @@ impl SongTrackOps for Song {
         track.settings.extend_rythmic = (flags2 & 0x0800) == 0x0800;
 
         track.rse.auto_accentuation = get_accentuation(read_byte(data, seek)?)?;
-        self.channels[number].bank = read_byte(data, seek)?;
+        self.channels[channel_index].bank = read_byte(data, seek)?;
         self.read_track_rse(data, seek, &mut track)?;
         self.tracks.push(track);
         Ok(())

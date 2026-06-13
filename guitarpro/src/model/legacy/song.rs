@@ -182,7 +182,7 @@ impl Song {
         self.lyrics = self.read_lyrics(data, &mut seek)?; //read lyrics
         self.master_effect = self.read_rse_master_effect(data, &mut seek)?;
         self.read_page_setup(data, &mut seek)?;
-        self.tempo_name = read_int_size_string(data, &mut seek)?;
+        self.tempo_name = read_int_byte_size_string(data, &mut seek)?;
         self.tempo = read_int(data, &mut seek)?.to_i16_gp("tempo")?;
         self.hide_tempo = if self.version.number > (5, 0, 0) {
             read_bool(data, &mut seek)?
@@ -275,7 +275,7 @@ impl Song {
         }
         if version.0 >= 5 {
             self.write_page_setup(&mut data)?;
-            write_int_size_string(&mut data, &self.tempo_name);
+            write_int_byte_size_string(&mut data, &self.tempo_name);
         }
         write_i32(&mut data, self.tempo.to_i32_gp("tempo")?);
         if version > (5, 0, 0) {

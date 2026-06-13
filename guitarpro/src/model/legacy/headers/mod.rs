@@ -117,7 +117,7 @@ impl Default for Marker {
 pub(crate) fn read_marker(data: &[u8], seek: &mut usize) -> GpResult<Marker> {
     use crate::io::primitive::*;
     let mut marker = Marker {
-        title: read_int_size_string(data, seek)?,
+        title: read_int_byte_size_string(data, seek)?,
         ..Default::default()
     };
     marker.color = read_color(data, seek)?;

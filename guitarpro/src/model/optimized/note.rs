@@ -240,7 +240,7 @@ pub enum Finger {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GpBendPoint {
     pub position: u8,
-    pub value: i8,
+    pub value: i16,
     pub vibrato: bool,
 }
 

@@ -67,12 +67,7 @@ impl SongEffectOps for Song {
                     .unwrap_or(0),
                 ..Default::default()
             };
-            bp.value = (f32::from(read_int(data, seek)?.to_i16().unwrap_or(0))
-                * f32::from(be.semitone_length)
-                / GP_BEND_SEMITONE)
-                .round()
-                .to_i8()
-                .unwrap_or(0);
+            bp.value = read_int(data, seek)?.to_i16().unwrap_or(0);
             bp.vibrato = read_bool(data, seek)?;
             be.points.push(bp);
         }
@@ -234,12 +229,7 @@ impl SongEffectOps for Song {
                     .round()
                     .to_i32_gp("bend point position")?,
                 );
-                write_i32(
-                    data,
-                    (f32::from(b.points[i].value) * GP_BEND_SEMITONE / GP_BEND_SEMITONE_LENGTH)
-                        .round()
-                        .to_i32_gp("bend point value")?,
-                );
+                write_i32(data, i32::from(b.points[i].value));
                 write_bool(data, b.points[i].vibrato);
             }
         }
@@ -252,7 +242,7 @@ impl SongEffectOps for Song {
         })?;
         write_signed_byte(data, g.fret);
         write_byte(data, pack_velocity(g.velocity)?.to_u8_gp("grace velocity")?);
-        write_byte(data, g.duration.leading_zeros() as u8);
+        write_byte(data, grace_duration_byte(g.duration));
         write_signed_byte(data, from_grace_effect_transition(&g.transition));
         Ok(())
     }
@@ -267,7 +257,7 @@ impl SongEffectOps for Song {
             data,
             from_grace_effect_transition(&g.transition).to_u8_gp("grace transition")?,
         );
-        write_byte(data, g.duration.leading_zeros() as u8);
+        write_byte(data, grace_duration_byte(g.duration));
         let mut flags = 0u8;
         if g.is_dead {
             flags |= 0x01;
@@ -353,5 +343,18 @@ impl SongEffectOps for Song {
             }
         }
         write_byte(data, st);
+    }
+}
+
+fn grace_duration_byte(duration: u8) -> u8 {
+    match duration {
+        128 => 0,
+        64 => 1,
+        32 => 2,
+        16 => 3,
+        8 => 4,
+        4 => 5,
+        2 => 6,
+        _ => 7,
     }
 }

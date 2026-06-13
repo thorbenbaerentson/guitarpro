@@ -102,6 +102,10 @@ fn test_demo_v5_gp5() {
     let path = Path::new("../test/Demo v5.gp5");
     let path = if path.exists() {
         path
+    } else if Path::new("../test/Demo.gp5").exists() {
+        Path::new("../test/Demo.gp5")
+    } else if Path::new("./test/Demo.gp5").exists() {
+        Path::new("./test/Demo.gp5")
     } else {
         Path::new("./test/Demo v5.gp5")
     };

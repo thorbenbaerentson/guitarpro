@@ -137,14 +137,18 @@ impl SongRseOps for Song {
         &self,
         data: &[u8],
         seek: &mut usize,
-        knobs: u8,
+        value_count: u8,
     ) -> GpResult<RseEqualizer> {
         let mut e = RseEqualizer::default();
-        for _ in 0..knobs {
-            e.knobs
-                .push(self.unpack_volume_value(read_signed_byte(data, seek)?));
-        } //knobs = list(map(self.unpackVolumeValue, self.readSignedByte(count=knobsNumber)))
-        Ok(e) //return gp.RSEEqualizer(knobs=knobs[:-1], gain=knobs[-1])
+        for index in 0..value_count {
+            let value = self.unpack_volume_value(read_signed_byte(data, seek)?);
+            if index + 1 == value_count {
+                e.gain = value;
+            } else {
+                e.knobs.push(value);
+            }
+        }
+        Ok(e)
     }
     /// Unpack equalizer volume value. Equalizer volumes are float but stored as `SignedBytes <signed-byte>`.
     fn unpack_volume_value(&self, value: i8) -> f32 {
@@ -224,6 +228,7 @@ impl SongRseOps for Song {
         for i in 0..equalizer.knobs.len() {
             write_signed_byte(data, self.pack_volume_value(equalizer.knobs[i]));
         }
+        write_signed_byte(data, self.pack_volume_value(equalizer.gain));
     }
     fn pack_volume_value(&self, value: f32) -> i8 {
         (-value * 10f32).round() as i8 //int(-round(value, 1) * 10)

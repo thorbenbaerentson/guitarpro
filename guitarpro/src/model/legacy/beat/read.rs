@@ -247,7 +247,7 @@ pub(super) fn read_tremolo_bar(
         position: BEND_EFFECT_MAX_POSITION / 2,
         value: (-f32::from(be.value) / GP_BEND_SEMITONE)
             .round()
-            .to_i8_gp("bend point value")?,
+            .to_i16_gp("bend point value")?,
         ..Default::default()
     });
     be.points.push(BendPoint {

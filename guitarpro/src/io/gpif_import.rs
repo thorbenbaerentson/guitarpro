@@ -145,8 +145,8 @@ fn parse_direction_sign(s: &str) -> Option<DirectionSign> {
 /// Build bend effect from GPIF origin/destination values (float, in 1/100 semitone).
 fn build_bend_effect(origin: f64, destination: f64) -> BendEffect {
     let mut bend = BendEffect::default();
-    let origin_val = (origin / GP_BEND_SEMITONE as f64).round() as i8;
-    let dest_val = (destination / GP_BEND_SEMITONE as f64).round() as i8;
+    let origin_val = origin.round().clamp(0.0, i16::MAX as f64) as i16;
+    let dest_val = destination.round().clamp(0.0, i16::MAX as f64) as i16;
 
     if origin == 0.0 && destination > 0.0 {
         bend.kind = BendType::Bend;
@@ -162,7 +162,7 @@ fn build_bend_effect(origin: f64, destination: f64) -> BendEffect {
         }
     }
 
-    bend.value = (destination.max(origin) / GP_BEND_SEMITONE as f64 * 2.0).round() as i16;
+    bend.value = destination.max(origin).round() as i16;
     bend.points.push(BendPoint {
         position: 0,
         value: origin_val,
@@ -170,7 +170,7 @@ fn build_bend_effect(origin: f64, destination: f64) -> BendEffect {
     });
     bend.points.push(BendPoint {
         position: 6,
-        value: ((origin_val as i16 + dest_val as i16) / 2) as i8,
+        value: (origin_val + dest_val) / 2,
         vibrato: false,
     });
     bend.points.push(BendPoint {

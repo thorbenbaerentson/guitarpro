@@ -10,7 +10,7 @@ use crate::{
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct BendPoint {
     pub position: u8,
-    pub value: i8,
+    pub value: i16,
     pub vibrato: bool,
 }
 impl BendPoint {
